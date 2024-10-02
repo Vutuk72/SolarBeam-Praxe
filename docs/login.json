@@ -1,0 +1,101 @@
+{
+  "LoginRequest": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "type": "string",
+        "format": "email",
+        "example": "test@test.com"
+      },
+      "password": {
+        "type": "string",
+        "example": "password"
+      }
+    },
+    "required": ["email", "password"]
+  },
+  "LoginResponse": {
+    "type": "object",
+    "properties": {
+      "token": {
+        "type": "string",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZvanRlY2hwZXRyYXNlayIsImlhdCI6MT"
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "test@test.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "Vojtěch Petrásek"
+          },
+          "nickanme": {
+            "type": "string",
+            "example": "VPetras"
+          },
+          "role": {
+            "type": "array",
+            "example": []
+          },
+          "sys": {
+            "type": "array",
+            "example": {
+              "cts": "2021-01-01T00:00:00.000Z",
+              "mts": "2021-01-01T00:00:00.000Z",
+              "rev": 1
+            }
+          }
+        }
+      },
+      "errors": {
+        "type": "array",
+        "example": []
+      }
+    }
+  },
+  "LoginError401": {
+    "type": "object",
+    "properties": {
+      "errors": {
+        "type": "string",
+        "example": "Invalid email or password"
+      }
+    }
+  },
+  "LoginError400": {
+    "type": "object",
+    "properties": {
+      "errors": {
+        "type": "string",
+        "example": [
+          {
+            "type": "field",
+            "msg": "Email is missing",
+            "path": "email",
+            "location": "body"
+          },
+          {
+            "type": "field",
+            "msg": "Invalid email",
+            "path": "email",
+            "location": "body"
+          },
+          {
+            "type": "field",
+            "msg": "Password is missing",
+            "path": "password",
+            "location": "body"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+name: Develop Build and Test
+
+on:
+  push:
+    branches: ["dev"]
+  pull_request:
+    branches: ["dev"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.1
+        with:
+          username: root
+          server: solarbeam.vojtechpetrasek.com
+          port: 22 # default is 22
+          ssh_private_key: ${{ secrets.SERVER }}
+
+          local_path: "./*"
+          remote_path: "/root/solarbeam/dev_backend"
+
+          args: "-o ConnectTimeout=5"
+
+      - name: Run systemd service
+        uses: appleboy/ssh-action@master
+        with:
+          host: solarbeam.vojtechpetrasek.com
+          username: root
+          key: ${{ secrets.SERVER }}
+          port: 22
+          script: |
+            cd solarbeam/dev_backend
+            npm install
+            cp dev_backend.service /etc/systemd/system
+            systemctl enable dev_backend.service
+            systemctl restart dev_backend.service

@@ -1,0 +1,15 @@
+[Unit]
+Description=Solarbeam API
+Documentation=https://dev.api.solarbeam.vojtechpetrasek.com/docs
+After=network.target
+
+[Service]
+Type=simple
+User=root
+EnvironmentFile=/root/solarbeam/dev_backend/.env.development
+WorkingDirectory=/root/solarbeam/dev_backend
+ExecStart=/usr/bin/node /root/solarbeam/dev_backend/main.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

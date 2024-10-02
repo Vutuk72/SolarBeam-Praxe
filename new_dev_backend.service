@@ -1,0 +1,14 @@
+[Unit]
+Description=Solarbeam API
+Documentation=https://dev.api.solarbeam.vojtechpetrasek.com/docs
+After=network.target
+
+[Service]
+Type=simple
+User=vpetras
+EnvironmentFile=/home/vpetras/solarbeam/dev_backend/.env.development
+ExecStart=/usr/bin/node /home/vpetras/solarbeam/dev_backend/main.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

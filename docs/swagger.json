@@ -1,0 +1,746 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Solarbeam EMS Cloud",
+    "version": "1.0.0",
+    "description": "API for Solarbeam EMS Cloud",
+    "contact": {
+      "email": "vojtechpetrasek@gmail.com"
+    },
+    "license": {
+      "name": "GPL-3.0",
+      "url": "https://opensource.org/license/gpl-3-0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.solarbeam.vojtechpetrasek.com",
+      "description": "Production server"
+    },
+    {
+      "url": "https://dev.api.solarbeam.vojtechpetrasek.com",
+      "description": "Development server"
+    },
+    {
+      "url": "http://localhost:6870",
+      "description": "Local server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication"
+    },
+    {
+      "name": "Devices",
+      "description": "Devices"
+    }
+  ],
+  "produces": ["application/json"],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "jwt",
+        "description": "note: non-oauth scopes are not defined at the securityScheme level"
+      },
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey"
+      }
+    },
+
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "test@test.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZvanRlY2hwZXRyYXNlayIsImlhdCI6MT"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "1"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "example": "test@test.com"
+              },
+              "name": {
+                "type": "string",
+                "example": "Vojtěch"
+              },
+              "lastname": {
+                "type": "string",
+                "example": "Petrásek"
+              },
+              "nickanme": {
+                "type": "string",
+                "example": "VPetras"
+              },
+              "role": {
+                "type": "array",
+                "example": []
+              },
+              "sys": {
+                "type": "array",
+                "example": {
+                  "cts": "2021-01-01T00:00:00.000Z",
+                  "mts": "2021-01-01T00:00:00.000Z",
+                  "rev": 1
+                }
+              }
+            }
+          },
+          "errors": {
+            "type": "array",
+            "example": []
+          }
+        }
+      },
+      "LoginError401": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["Invalid email or password"]
+          }
+        }
+      },
+      "LoginError400": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": [
+              {
+                "type": "field",
+                "msg": "Email is missing",
+                "path": "email",
+                "location": "body"
+              },
+              {
+                "type": "field",
+                "msg": "Invalid email",
+                "path": "email",
+                "location": "body"
+              },
+              {
+                "type": "field",
+                "msg": "Password is missing",
+                "path": "password",
+                "location": "body"
+              }
+            ]
+          }
+        }
+      },
+
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "test@test.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password"
+          },
+          "name": {
+            "type": "string",
+            "example": "Vojtěch"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Petrásek"
+          },
+          "nickname": {
+            "type": "string",
+            "example": "VPetras"
+          }
+        },
+        "required": ["email", "password", "name", "nickname"]
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZvanRlY2hwZXRyYXNlayIsImlhdCI6MT"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "1"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "example": "test@test.com"
+              },
+              "name": {
+                "type": "string",
+                "example": "Vojtěch"
+              },
+              "lastname": {
+                "type": "string",
+                "example": "Petrásek"
+              },
+              "nickanme": {
+                "type": "string",
+                "example": "VPetras"
+              },
+              "role": {
+                "type": "array",
+                "example": []
+              },
+              "sys": {
+                "type": "array",
+                "example": {
+                  "cts": "2021-01-01T00:00:00.000Z",
+                  "mts": "2021-01-01T00:00:00.000Z",
+                  "rev": 1
+                }
+              }
+            }
+          },
+          "errors": {
+            "type": "array",
+            "example": []
+          }
+        }
+      },
+      "RegisterError409": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["User with this email already exists"]
+          }
+        }
+      },
+      "RegisterError400": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": [
+              {
+                "type": "field",
+                "msg": "Name is Empty",
+                "path": "name",
+                "location": "body"
+              },
+              {
+                "type": "field",
+                "msg": "Lastname is Empty",
+                "path": "lastname",
+                "location": "body"
+              },
+              {
+                "type": "field",
+                "msg": "Nickname is Empty",
+                "path": "nickname",
+                "location": "body"
+              },
+              {
+                "type": "field",
+                "msg": "Invalid email",
+                "path": "email",
+                "location": "body"
+              },
+              {
+                "type": "field",
+                "msg": "Password is Empty",
+                "path": "password",
+                "location": "body"
+              },
+              {
+                "type": "field",
+                "msg": "The minimum password length is 8 characters",
+                "path": "password",
+                "location": "body"
+              }
+            ]
+          }
+        }
+      },
+      "DevicesRequest": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "example": 10
+          },
+          "offset": {
+            "type": "integer",
+            "example": 0
+          }
+        }
+      },
+      "DevicesResponse": {
+        "type": "object",
+        "properties": {
+          "active_devices": {
+            "type": "array",
+            "example": [
+              {
+                "_id": "5f9e9b7b9c6b4e0017b3b3b3",
+                "name": "Device name",
+                "sys": {
+                  "cts": "2021-01-01T00:00:00.000Z",
+                  "mts": "2021-01-01T00:00:00.000Z",
+                  "rev": 1
+                }
+              }
+            ]
+          },
+          "archived_devices": { "type": "array", "example": [] },
+          "shared_devices": { "type": "array", "example": [] },
+          "errors": {
+            "type": "array",
+            "example": []
+          }
+        }
+      },
+      "DevicesError401": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["Unauthorized"]
+          }
+        }
+      },
+      "DeviceDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "example": {
+              "key": "value"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "example": []
+          }
+        }
+      },
+      "DeviceDataError401": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["Unauthorized"]
+          }
+        }
+      },
+      "DeviceDataError404": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["Device not found"]
+          }
+        }
+      },
+      "DeviceHistoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "u_pv1": [
+              {
+                "value": "200",
+                "time": "2021-01-01T00:00:00.000Z"
+              },
+              {
+                "value": "300",
+                "time": "2021-01-01T00:05:00.000Z"
+              }
+            ]
+          },
+          "errors": {
+            "type": "array",
+            "example": []
+          }
+        }
+      },
+      "DeviceHistoryError401": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["Unauthorized"]
+          }
+        }
+      },
+      "DeviceHistoryError404": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["Device not found"]
+          }
+        }
+      }
+    }
+  },
+
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login",
+        "description": "Login to the system",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginError400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginError401"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register",
+        "description": "Register to the system",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterError400"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterError409"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/devices": {
+      "get": {
+        "summary": "Devices",
+        "tags": ["Devices"],
+        "description": "Get devices",
+        "security": [
+          {
+            "bearerAuth": ["read:users", "public"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DevicesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/device": {
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Create device",
+        "description": "Create device",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Device name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Device description"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "Device type"
+                  },
+                  "data": {
+                    "type": "object",
+                    "example": {
+                      "key": "value"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/device/{id}": {
+      "get": {
+        "tags": ["Devices"],
+        "summary": "Get device by id",
+        "description": "Get device by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Device id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/device/{id}/data": {
+      "get": {
+        "tags": ["Devices"],
+        "summary": "Get device data by id",
+        "description": "Get device data by id",
+        "security": [
+          {
+            "bearerAuth": [],
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Device id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDataResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid token"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Device not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/device/{id}/history": {
+      "get": {
+        "tags": ["Devices"],
+        "summary": "Get device data by id and key",
+        "description": "Get device data by id and key",
+        "security": [
+          {
+            "bearerAuth": [],
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Device id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "querry",
+            "description": "start time in \"YYYY-MM-DDTHH:mm:ss.sssZ\" format",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stop",
+            "in": "querry",
+            "description": "stop time in \"YYYY-MM-DDTHH:mm:ss.sssZ\" format",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceHistoryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid token"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Device not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

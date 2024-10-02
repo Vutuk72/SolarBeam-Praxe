@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Solarbeam api",
+  "main": "main.js",
+  "scripts": {
+    "test": "env-cmd -f .env.test jest --testTimeout=5000 --detectOpenHandles --forceExit",
+    "testcov": "env-cmd -f .env.test jest --testTimeout=5000 --detectOpenHandles --coverage --forceExit",
+    "dev": "nodemon main.js",
+    "develop": "env-cmd -f .env.development nodemon main.js",
+    "devlocal": "env-cmd -f .env.local nodemon main.js"
+  },
+  "author": "Vojtěch Petrásek",
+  "license": "ISC",
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.2",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "env-cmd": "^10.1.0",
+    "express": "^4.18.2",
+    "express-cors": "0.0.3",
+    "express-validator": "^7.0.1",
+    "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "mongodb": "^5.5.0",
+    "mqtt": "^5.3.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.9",
+    "nodemon": "^3.1.0",
+    "supertest": "^6.3.4",
+    "swagger-ui-express": "^4.6.3",
+    "mongoose": "^5.5.7"
+  }
+}
